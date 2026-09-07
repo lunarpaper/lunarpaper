@@ -1,0 +1,29 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help shape Lunar Paper. Search existing suggestions first and upvote an existing discussion if it matches your idea. Share one feature per post; suggestions are not delivery commitments.
+  - type: textarea
+    id: need
+    attributes:
+      label: What are you trying to accomplish?
+      description: Describe the task or problem in your own words.
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: What would make this easier?
+      description: Explain your idea and how it would help you or other users.
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: How do you handle this today?
+      description: Optional. Describe your current workaround or alternatives you have considered.
+  - type: textarea
+    id: example
+    attributes:
+      label: Examples or additional context
+      description: Optional. Sketches and screenshots are welcome; remove private information.

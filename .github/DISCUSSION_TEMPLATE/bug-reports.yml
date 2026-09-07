@@ -1,0 +1,46 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found something that seems broken? Search existing reports first. Keep one problem per discussion. Remove passwords, tokens, personal information, and customer data before posting.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the problem and how it affects your work.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Tell another user how to see the same problem. If you cannot reproduce it consistently, say so.
+      placeholder: |
+        1. Open…
+        2. Select…
+        3. Observe…
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Lunar Paper version
+      placeholder: For example, 0.6.0, or not sure
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, device, and installation details
+      description: Include what you know; technical expertise is not required.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots, error messages, or workaround
+      description: Optional. Remove private information before attaching anything.

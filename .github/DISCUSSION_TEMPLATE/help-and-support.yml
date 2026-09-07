@@ -1,0 +1,27 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask the community for help. Search existing questions first and remove private information from screenshots or logs. Once solved, mark the helpful reply as the answer.
+  - type: textarea
+    id: question
+    attributes:
+      label: What would you like help with?
+      description: Describe what you want to accomplish and where you are stuck.
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: Tell us what happened and include any error message, with private details removed.
+  - type: input
+    id: version
+    attributes:
+      label: Lunar Paper version
+      placeholder: For example, 0.6.0, or not sure
+  - type: input
+    id: environment
+    attributes:
+      label: Browser or installation details
+      description: If relevant, include your browser, device, and whether you manage the installation yourself.

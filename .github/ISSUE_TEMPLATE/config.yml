@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask the community
+    url: https://github.com/lunarpaper/lunarpaper/discussions/categories/help-and-support
+    about: Get help from other Lunar Paper users.
+  - name: Report a bug
+    url: https://github.com/lunarpaper/lunarpaper/discussions/categories/bug-reports
+    about: Share a reproducible problem; maintainers can turn confirmed reports into issues.
+  - name: Request a feature
+    url: https://github.com/lunarpaper/lunarpaper/discussions/categories/feature-requests
+    about: Explain your use case, discuss ideas, and upvote existing suggestions.
