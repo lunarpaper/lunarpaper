@@ -1,0 +1,29 @@
+# Use with compose.yaml; set APP_URL to https://your-internal-hostname.
+services:
+  lunarpaper:
+    environment:
+      TRUST_PROXY_HOPS: "1"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      APP_URL: ${APP_URL:?APP_URL is required}
+      CADDY_TLS_DIRECTIVE: ${CADDY_TLS_DIRECTIVE-tls internal}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      lunarpaper:
+        condition: service_healthy
+    networks:
+      - edge
+
+volumes:
+  caddy-data:
+  caddy-config:

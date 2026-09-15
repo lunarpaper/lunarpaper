@@ -1,0 +1,6 @@
+{$APP_URL} {
+	{$CADDY_TLS_DIRECTIVE}
+	encode zstd gzip
+	reverse_proxy lunarpaper:3000
+	header -Server
+}

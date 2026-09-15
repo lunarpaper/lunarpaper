@@ -1,0 +1,89 @@
+Lunar Paper Software Licence
+
+Copyright (c) 2026 Ben Martinson. All rights reserved.
+
+By installing or using Lunar Paper (the "Software"), you agree to these terms.
+
+1. LICENCE GRANT
+
+Ben Martinson grants you a limited, non-exclusive and non-transferable licence
+to install and run the Software for your own personal use or your organisation's
+internal work, subject to these terms. The licence continues for as long as you
+comply with these terms and, for a paid tier, keep the relevant subscription
+current.
+
+The Free tier permits up to three active accounts. A paid tier permits up to the
+number of active accounts stated for that tier when you purchase it. Deactivated
+accounts and people who only view published material do not count toward that
+limit.
+
+A licence covers one active installation. You may keep backup copies reasonably
+necessary to protect or restore that installation, but a backup may not be run as
+a second production installation. You may run a replacement temporarily while
+moving the licensed installation to new infrastructure.
+
+2. RESTRICTIONS
+
+You may not:
+
+- redistribute, sell, sublicense or make the Software available as a hosted
+  service for somebody else;
+- run more active installations or accounts than your licence permits;
+- bypass, disable or interfere with licence controls;
+- remove copyright, trade mark or other ownership notices; or
+- reverse engineer the Software except where applicable law gives you a right
+  that cannot be excluded.
+
+3. OWNERSHIP AND YOUR DATA
+
+The Software, its design and documentation, and the Lunar Paper branding remain
+the property of Ben Martinson and the relevant third-party licensors. This
+licence gives you permission to use the Software; it does not transfer ownership
+of it or grant rights to the Lunar Paper name or branding.
+
+You retain ownership of the data and content you put into the Software. You are
+responsible for that content, for the people you allow to use the installation,
+and for maintaining suitable backups and security for your infrastructure.
+
+4. PAID LICENCES AND CANCELLATION
+
+Paid licences are sold by Dodo Payments as merchant of record. The price, billing
+period, taxes, renewal and payment details shown at checkout form part of the
+purchase. Dodo Payments' Buyer Terms also apply to the transaction:
+
+https://dodopayments.com/buyer-terms
+
+If a paid licence ends, the Software continues to run and your data remains on
+your infrastructure. The installation returns to the Free tier limit of three
+active accounts until another paid licence is activated.
+
+5. BETA SOFTWARE AND UPDATES
+
+Version 0.8.0 is beta software under active development. Features, interfaces
+and data formats may change between releases, and a release may contain defects.
+Read the release notes before updating and keep tested backups of your database
+and uploaded files.
+
+Updates are licensed under the terms supplied with that update. You are not
+required to install an update, although older versions may stop receiving fixes
+or security updates.
+
+6. WARRANTY AND LIABILITY
+
+To the maximum extent permitted by law, the Software is provided "as is" and
+without a promise that it will be uninterrupted, error-free or suitable for a
+particular purpose. Ben Martinson is not liable for indirect or consequential
+loss, lost profit, lost revenue or lost data arising from use of the Software.
+
+Nothing in these terms excludes, restricts or modifies a guarantee, right or
+remedy that cannot lawfully be excluded, including any applicable rights under
+the Australian Consumer Law.
+
+7. ENDING THE LICENCE
+
+The licence ends if you materially breach these terms and do not fix the breach
+after being asked to do so. When it ends, you must stop running the Software and
+remove copies in your control. Your data remains in the database and storage that
+you control.
+
+Questions about this licence may be sent to hello@lunarpaper.com.

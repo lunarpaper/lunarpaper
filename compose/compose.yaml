@@ -1,0 +1,180 @@
+services:
+  lunarpaper:
+    image: ${LUNAR_PAPER_IMAGE:?Set LUNAR_PAPER_IMAGE in your private environment file}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      PROCESS_ROLE: all
+      CLUSTER_WORKERS: "1"
+
+      # One browser URL controls origins and cookie security for HTTP or HTTPS.
+      APP_URL: ${APP_URL:?APP_URL is required}
+      API_URL: ${APP_URL:?APP_URL is required}
+      ALLOWED_ORIGINS: ${APP_URL:?APP_URL is required}
+      PUBLISHER_CALLBACK_ORIGINS: ${APP_URL:?APP_URL is required}
+
+      # Keyed web setup and manual upgrades are fixed application behaviour.
+      SETUP_KEY: ${SETUP_KEY:?SETUP_KEY is required}
+      # Forward the same image selection to the app's release checks.
+      LUNAR_PAPER_IMAGE: ${LUNAR_PAPER_IMAGE:?LUNAR_PAPER_IMAGE is required}
+      SYSTEM_ADMIN_USERNAME: ${SYSTEM_ADMIN_USERNAME:?SYSTEM_ADMIN_USERNAME is required}
+      SYSTEM_ADMIN_PASSWORD: ${SYSTEM_ADMIN_PASSWORD:?SYSTEM_ADMIN_PASSWORD is required}
+
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:?INTERNAL_API_TOKEN is required}
+      AI_ENCRYPTION_KEY: ${AI_ENCRYPTION_KEY:?AI_ENCRYPTION_KEY is required}
+      MFA_ENCRYPTION_KEY: ${MFA_ENCRYPTION_KEY:?MFA_ENCRYPTION_KEY is required}
+      SSO_ENCRYPTION_KEY: ${SSO_ENCRYPTION_KEY:?SSO_ENCRYPTION_KEY is required}
+      DATA_SOURCE_ENCRYPTION_KEY: ${DATA_SOURCE_ENCRYPTION_KEY:?DATA_SOURCE_ENCRYPTION_KEY is required}
+      PUBLISHER_CREDENTIAL_ENCRYPTION_KEY: ${PUBLISHER_CREDENTIAL_ENCRYPTION_KEY:?PUBLISHER_CREDENTIAL_ENCRYPTION_KEY is required}
+      EMAIL_ENCRYPTION_KEY: ${EMAIL_ENCRYPTION_KEY:?EMAIL_ENCRYPTION_KEY is required}
+      ADDRESS_PROVIDER_ENCRYPTION_KEY: ${ADDRESS_PROVIDER_ENCRYPTION_KEY:?ADDRESS_PROVIDER_ENCRYPTION_KEY is required}
+      EMAIL_TRACKING_SECRET: ${EMAIL_TRACKING_SECRET:?EMAIL_TRACKING_SECRET is required}
+      PDF_EXPORT_SECRET: ${PDF_EXPORT_SECRET:?PDF_EXPORT_SECRET is required}
+      FORM_FILE_ENCRYPTION_KEYS: ${FORM_FILE_ENCRYPTION_KEYS:?FORM_FILE_ENCRYPTION_KEYS is required}
+      FORM_FILE_ENCRYPTION_ACTIVE_KEY_ID: v1
+
+      # Optional: Compose omits unset entries from the container environment.
+      # See the commented remote-service example in .env.example.
+      DATA_LAYER_ENABLED:
+      DATA_LAYER_URL:
+      DATA_LAYER_API_KEY:
+      DATA_LAYER_ALLOWED_ENDPOINTS:
+
+      # Two databases, each with a runtime URL and a separate setup/upgrade owner URL.
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: platform
+      PGUSER: postgres
+      PGPASSWORD: ${PGPASSWORD:?PGPASSWORD is required}
+      DATABASE_URL: postgresql://app_platform:${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}@postgres:5432/platform
+      INTAKE_DATABASE_URL: postgresql://app_intake:${APP_INTAKE_PASSWORD:?APP_INTAKE_PASSWORD is required}@postgres:5432/intake
+      MIGRATION_PLATFORM_DATABASE_URL: postgresql://postgres:${PGPASSWORD:?PGPASSWORD is required}@postgres:5432/platform
+      MIGRATION_INTAKE_DATABASE_URL: postgresql://postgres:${PGPASSWORD:?PGPASSWORD is required}@postgres:5432/intake
+      APP_DB_ROLE: "true"
+      DB_POOL_MAX: "40"
+
+      SESSION_STORE: redis
+      REDIS_REQUIRED: "true"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+
+      SEAWEEDFS_MASTER_URL: http://seaweedfs:9333
+      SEAWEEDFS_FILER_URL: http://seaweedfs:8888
+      SEAWEEDFS_VOLUME_URL: http://seaweedfs:8080
+    volumes:
+      - uploads-data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+    networks:
+      - edge
+      - backend
+
+  # Copies fresh-install SQL from the selected application image, not a checkout.
+  # Existing populated PostgreSQL volumes do not rerun these init files.
+  database-bootstrap:
+    image: ${LUNAR_PAPER_IMAGE:?LUNAR_PAPER_IMAGE is required}
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    entrypoint: ["/bin/sh", "/app/docker/database-bootstrap.sh"]
+    volumes:
+      - database-init:/database-init
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PGPASSWORD:?PGPASSWORD is required}
+      APP_PLATFORM_PASSWORD: ${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}
+      APP_INTAKE_PASSWORD: ${APP_INTAKE_PASSWORD:?APP_INTAKE_PASSWORD is required}
+    command: ["postgres", "-c", "max_connections=200"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - database-init:/docker-entrypoint-initdb.d:ro
+    depends_on:
+      database-bootstrap:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d platform && pg_isready -U postgres -d intake"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD is required}"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=\"$${REDIS_PASSWORD}\" redis-cli ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    networks:
+      - backend
+
+  # Master, volume server and filer together for a single-server installation.
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.47
+    restart: unless-stopped
+    working_dir: /data
+    command:
+      - server
+      - -ip=seaweedfs
+      - -ip.bind=0.0.0.0
+      - -dir=/data
+      - -master.volumeSizeLimitMB=1024
+      - -volume.max=0
+      - -filer
+    volumes:
+      - seaweedfs-data:/data
+      - ./filer.toml:/etc/seaweedfs/filer.toml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9333/cluster/status && wget -q -O /dev/null http://127.0.0.1:8888/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - backend
+
+
+volumes:
+  postgres-data:
+  redis-data:
+  uploads-data:
+  database-init:
+  seaweedfs-data:
+
+networks:
+  edge:
+  backend:
+    internal: true

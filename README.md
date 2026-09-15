@@ -1,51 +1,142 @@
 # Lunar Paper
 
-Welcome to the Lunar Paper community. Ask questions, help other users, report
-problems, and share ideas for making Lunar Paper better.
+Lunar Paper is a self-hosted platform that runs on your own computer, server or
+infrastructure, keeping the platform and its data under your control.
 
-**[Visit the discussion board](https://github.com/lunarpaper/lunarpaper/discussions)**
+Plan projects, manage tasks and resources, automate processes, connect and
+transform data, and turn that data into dashboards and reports. Create animated
+pixel art, build slideshows, produce structured documents, design visual content,
+compose audio and manage the assets behind it.
 
-| I want to… | Where to post |
+Everything comes together in one platform, with live multi-user collaboration,
+governance, user and access management, and a broad set of features for both the
+people doing the work and the administrators running the installation.
+
+[Explore Lunar Paper](https://lunarpaper.com/) ·
+[Browse all applications](https://lunarpaper.com/applications/) ·
+[Read the documentation](https://docs.lunarpaper.com/docs/) ·
+[Follow the self-hosting guide](https://docs.lunarpaper.com/self-hosting/)
+
+> **Public beta:** Use the full platform for free for three people
+> with no time limit. See the [current plans](https://lunarpaper.com/pricing/) and
+> [release notes](https://github.com/lunarpaper/lunarpaper/releases) for details.
+
+### Projects
+
+![A project timeline in Lunar Paper showing phases, tasks and assigned team members](screenshots/02-projects.png)
+
+### Dashboards
+
+![A Lunar Paper dashboard combining delivery metrics, charts and tables](screenshots/03-dashboards.png)
+
+### Forms
+
+![The Lunar Paper form builder with a branded form and field controls](screenshots/04-forms.png)
+
+### Automation
+
+![A visual automation workflow in Lunar Paper](screenshots/05-automation.png)
+
+### Design Studio
+
+![Lunar Paper Design Studio showing a multi-page Cedar House layout](screenshots/01-design-studio.png)
+
+## Twenty applications, one platform
+
+Public beta version 0.8.0 includes the following applications:
+
+| Area | Applications |
 | --- | --- |
-| Get help using or setting up Lunar Paper | **[Help and support](https://github.com/lunarpaper/lunarpaper/discussions/categories/help-and-support)** |
-| Report something that appears broken | **[Bug reports](https://github.com/lunarpaper/lunarpaper/discussions/categories/bug-reports)** |
-| Suggest an improvement or new feature | **[Feature requests](https://github.com/lunarpaper/lunarpaper/discussions/categories/feature-requests)** |
-| Share a useful workflow, example, or tip | **Show and tell** |
-| Chat with other users | **General** |
-| Read updates from the maintainers | **Announcements** |
+| Planning and running work | [Projects](https://lunarpaper.com/applications/projects/), [Task Boards](https://lunarpaper.com/applications/task-boards/), [Resources](https://lunarpaper.com/applications/resources/), [Automation](https://lunarpaper.com/applications/automation/), [Forms](https://lunarpaper.com/applications/forms/) and [Team Calendar](https://lunarpaper.com/applications/team-calendar/) |
+| Data and reporting | [Data Hub](https://lunarpaper.com/applications/data-hub/) and [Dashboards](https://lunarpaper.com/applications/dashboards/) |
+| Documents and publishing | [Documents](https://lunarpaper.com/applications/documents/), [Charts and Flowcharts](https://lunarpaper.com/applications/charts-and-flowcharts/), [Slideshow](https://lunarpaper.com/applications/slideshow/) and [Workspaces](https://lunarpaper.com/applications/workspace/) |
+| Design and media | [Design Studio](https://lunarpaper.com/applications/design-studio/), [Brand Hub](https://lunarpaper.com/applications/brand-hub/), [Image Generation](https://lunarpaper.com/applications/image-generation/), [Pixel Art](https://lunarpaper.com/applications/pixel-art/), [Audio Creator](https://lunarpaper.com/applications/audio-creator/) and [Asset Management](https://lunarpaper.com/applications/asset-management/) |
+| Communications | [Email Builder](https://lunarpaper.com/applications/email-builder/) |
+| Administration | [Administration](https://lunarpaper.com/applications/administration/) |
 
-Search existing discussions before opening a new one. If someone has already
-reported your problem or suggested your idea, add useful details to that thread
-and use the upvote button to show your interest.
+Explore the complete [applications catalogue](https://lunarpaper.com/applications/)
+or read the [platform overview](https://lunarpaper.com/platform/) for more about
+collaboration, governance, access control, shared libraries, optional AI and
+integrations.
 
-## Get a useful answer
+## Why self-host it?
 
-Describe what you were trying to do, what happened, and what you have already
-tried. Include your Lunar Paper version when you know it. Screenshots and short
-examples help; remove passwords, tokens, personal information, and customer data
-before sharing them.
+- Keep the application, PostgreSQL data, file storage and backups on
+  infrastructure you choose.
+- Give each service its own members, branding and content while managing users,
+  teams, permissions and audit activity centrally.
+- Use local accounts or connect OIDC single sign-on.
+- Connect an OpenAI-compatible provider with your own credentials, or leave AI
+  unconfigured.
+- Choose which external services the installation may reach by configuring its
+  integrations and network policy.
 
-When a reply solves your question, mark it as the answer. If you find the solution
-yourself, post it so the next person can benefit.
+Lunar Paper is an independent project built in Australia. Read more about the
+project on the [Lunar Paper website](https://lunarpaper.com/about/).
 
-## Bugs and feature requests
+## Get started with Docker
 
-Start in Discussions so other users can confirm the behaviour, suggest a
-workaround, or improve the idea. Maintainers may turn confirmed, actionable work
-into a linked issue. A discussion or an upvote is not a delivery commitment.
+This repository contains the customer-facing information and the supported
+single-host Docker Compose deployment bundle. Application images are published
+to GitHub Container Registry as `ghcr.io/lunarpaper/platform`; large image files
+are not committed to Git.
 
-Please keep one problem or feature per discussion. For a bug, include steps that
-someone else can follow and explain the expected and actual results. For a
-feature, explain the task you want to accomplish and why the current options
-fall short.
+Install Docker and Docker Compose, then follow the deployment instructions for
+your operating system:
 
-## Community expectations
+- [Linux](compose/README.md#linux)
+- [Windows](compose/README.md#windows)
+- [macOS](compose/README.md#macos)
 
-Be kind, patient, and specific. Different experience levels are welcome. Discuss
-ideas without attacking people, respect others' privacy, and avoid spam or
-unsolicited promotion. Community help is voluntary; response times will vary.
+Each path covers cloning the repository, creating a private environment outside
+the checkout, validating the configuration, pulling the selected release and
+starting Lunar Paper. The [complete Compose guide](compose/README.md) also covers
+LAN access, HTTPS, certificates, backups and upgrades.
 
-This repository is the community and distribution home for Lunar Paper; it does
-not contain the private application source code. Available published versions
-will appear under [Releases](https://github.com/lunarpaper/lunarpaper/releases)
-and linked container packages.
+> Pin a release version or image digest that the release notes identify as
+> compatible with this bundle. Do not deploy the moving `latest` tag.
+
+## What is in this repository
+
+| Path | Purpose |
+| --- | --- |
+| [`compose/`](compose/) | Single-host Docker Compose deployment for HTTP or HTTPS |
+| [`compose/.env.example`](compose/.env.example) | Blank configuration template—never put real credentials in this repository |
+| [`screenshots/`](screenshots/) | Full-resolution promotional product screenshots used by this README |
+| [`LICENSE`](LICENSE) | Lunar Paper software licence |
+| [`SECURITY.md`](SECURITY.md) | Private vulnerability-reporting guidance |
+
+The Compose bundle runs Lunar Paper with PostgreSQL, Redis and SeaweedFS, plus
+optional Caddy HTTPS termination. It is intended for a fresh, single-host
+installation; it does not claim multi-node high availability or Kubernetes
+support.
+
+## Operate it safely
+
+- Keep the populated environment file and all credentials outside the clone.
+- Keep `SETUP_KEY`, encryption keys and database passwords stable across restarts.
+- Back up PostgreSQL, Redis, uploads, the complete SeaweedFS volume, Caddy state
+  and the private environment file.
+- Keep `--project-name lunarpaper` and the same access-file selection on every
+  Compose command so the deployment continues using the same volumes.
+- Never use `docker compose down --volumes` during an upgrade.
+- Review release notes and make tested backups before changing image versions.
+
+## Help, releases and security
+
+- [Documentation](https://docs.lunarpaper.com/docs/) — product and administration guides.
+- [Self-hosting guide](https://docs.lunarpaper.com/self-hosting/docker/) — Docker deployment instructions.
+- [GitHub Releases](https://github.com/lunarpaper/lunarpaper/releases) — compatible images, changes and upgrade notes.
+- [Community forum](https://github.com/lunarpaper/lunarpaper/discussions) — usage questions and ideas.
+- [GitHub Issues](https://github.com/lunarpaper/lunarpaper/issues) — reproducible, non-security bugs.
+- [SECURITY.md](SECURITY.md) — private vulnerability-reporting instructions.
+
+Do not post credentials, customer data or vulnerability details in a public
+issue.
+
+## Licence
+
+Lunar Paper is proprietary software. Installing or using it means accepting the
+terms in [LICENSE](LICENSE). The public availability of this repository and its
+container images does not grant redistribution or modification rights. See the
+[licence overview](https://lunarpaper.com/licence/) for a plain-language summary.

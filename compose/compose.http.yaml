@@ -1,0 +1,6 @@
+# Use with compose.yaml; set APP_URL to the exact http:// browser address.
+# Loopback by default. For LAN access, select an interface in your private env file.
+services:
+  lunarpaper:
+    ports:
+      - "${HTTP_BIND_ADDRESS:-127.0.0.1}:${HOST_PORT:-3000}:3000"

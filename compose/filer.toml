@@ -1,0 +1,4 @@
+# Persist the file directory/index alongside the file contents in the data volume.
+[leveldb2]
+enabled = true
+dir = "/data/filerldb2"
