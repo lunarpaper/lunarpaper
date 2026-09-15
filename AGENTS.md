@@ -2,6 +2,11 @@
 
 Everything in this repository is public and customer-facing.
 
+- Make future changes on the `preview` branch and open a pull request into
+  `main`. Do not push content updates directly to `main`.
+- Treat `main` as the approved public state. Changes require review from the
+  code owner in `.github/CODEOWNERS` before merging when branch protection is
+  available.
 - Never add credentials, API keys, tokens, passwords, private keys, populated
   environment files, backups, logs, database dumps or customer data.
 - Keep required values blank in `.env.example`; examples must use unmistakably
