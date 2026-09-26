@@ -1,6 +1,8 @@
+# Release template. The promotion pipeline replaces the image selections with
+# verified digests. Customers deploy the generated release ZIP, not this template.
 services:
   lunarpaper:
-    image: ${LUNAR_PAPER_IMAGE:?Set LUNAR_PAPER_IMAGE in your private environment file}
+    image: ${LUNAR_PAPER_IMAGE:?Download the generated Lunar Paper release bundle}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -22,6 +24,7 @@ services:
       SYSTEM_ADMIN_PASSWORD: ${SYSTEM_ADMIN_PASSWORD:?SYSTEM_ADMIN_PASSWORD is required}
 
       SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+      COOKIE_NAMESPACE: ${COOKIE_NAMESPACE:-}
       ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
       INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:?INTERNAL_API_TOKEN is required}
       AI_ENCRYPTION_KEY: ${AI_ENCRYPTION_KEY:?AI_ENCRYPTION_KEY is required}
@@ -88,22 +91,12 @@ services:
       - edge
       - backend
 
-  # Copies fresh-install SQL from the selected application image, not a checkout.
-  # Existing populated PostgreSQL volumes do not rerun these init files.
-  database-bootstrap:
-    image: ${LUNAR_PAPER_IMAGE:?LUNAR_PAPER_IMAGE is required}
-    user: "0:0"
-    restart: "no"
-    network_mode: none
-    entrypoint: ["/bin/sh", "/app/docker/database-bootstrap.sh"]
-    volumes:
-      - database-init:/database-init
-
   postgres:
-    image: postgres:17-alpine
+    image: ${LUNAR_PAPER_DATABASE_IMAGE:?Download the generated Lunar Paper release bundle}
     restart: unless-stopped
     environment:
       POSTGRES_DB: platform
+      LUNAR_PAPER_PLATFORM_IMAGE: ${LUNAR_PAPER_IMAGE:?Download the generated Lunar Paper release bundle}
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PGPASSWORD:?PGPASSWORD is required}
       APP_PLATFORM_PASSWORD: ${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}
@@ -111,12 +104,8 @@ services:
     command: ["postgres", "-c", "max_connections=200"]
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - database-init:/docker-entrypoint-initdb.d:ro
-    depends_on:
-      database-bootstrap:
-        condition: service_completed_successfully
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d platform && pg_isready -U postgres -d intake"]
+      test: ["CMD", "lunarpaper-postgres-health"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -171,7 +160,6 @@ volumes:
   postgres-data:
   redis-data:
   uploads-data:
-  database-init:
   seaweedfs-data:
 
 networks:

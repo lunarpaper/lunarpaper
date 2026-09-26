@@ -8,14 +8,14 @@ a public domain is not required.
 For the broader installation, networking, configuration, backup and maintenance
 documentation, see the public [Self-hosting guide](https://docs.lunarpaper.com/self-hosting/).
 
-> **Release compatibility:** use an exact Lunar Paper image version or digest
-> whose [release notes](https://github.com/lunarpaper/lunarpaper/releases) identify
-> this bundle as supported. The image must contain the image-matched database
-> bootstrap and current keyed setup flow. Do not use `latest`.
+> Download `lunarpaper-<version>-compose.zip` from the selected
+> [release](https://github.com/lunarpaper/lunarpaper/releases) and extract it.
+> The release bundle already pins matching application and database images.
+> The files in this repository are release templates; do not deploy them directly.
 
 ## Installation overview
 
-1. Create a private environment file outside the repository.
+1. Download and extract the release bundle, then create a private environment file outside it.
 2. Choose exactly one access file: HTTP or HTTPS.
 3. Validate the resolved configuration without printing secrets.
 4. Pull the pinned images and start the stack.
@@ -23,23 +23,23 @@ documentation, see the public [Self-hosting guide](https://docs.lunarpaper.com/s
 
 ## Requirements
 
-- Docker Engine or Docker Desktop with Docker Compose v2. Platform-specific
-  installation links and deployment commands are provided below.
+- A supported Docker Engine or Docker Desktop with Docker Compose v2.
+  Deployment uses ordinary images and named volumes; no image-mount storage
+  configuration is required. See the selected release's supported host versions.
 - A browser address reachable from your devices: localhost, a LAN address or an
   internal hostname. For HTTPS, reserve ports 80/443 and arrange client trust for
   the internal certificate authority, or use your organisation's TLS infrastructure.
-- A supported release image reference from Lunar Paper, preferably its published
-  digest. The source repository address is not the container image address.
+- The generated Compose ZIP from a supported Lunar Paper release.
 - Persistent disk space for the databases, file storage and generated documents.
 
 ## Configure
 
-Keep the populated environment file **outside this checkout**. Never put real
-passwords, API keys or private keys into the example or any other repository file.
+Keep the populated environment file **outside the extracted bundle**. Never put real
+passwords, API keys or private keys into the example or any other bundle file.
 The operating-system instructions below create a private `deployment.env` from
 the blank `.env.example` template.
 
-Set the image reference, `APP_URL`, administrator email and password. Generate
+Set `APP_URL`, administrator email and password. Generate
 every remaining secret independently; do not reuse one generated value across
 fields. The form-file keyring is a JSON object using `v1` as its key ID, as
 explained in the template. Keep all keys and database passwords stable across
@@ -85,6 +85,12 @@ There are no cookie-security or evaluation flags for customers to coordinate.
 Use a different hostname for HTTP if the old hostname has cached an HTTPS-only
 HSTS policy.
 
+If more than one Lunar Paper deployment uses the same browser hostname or IP,
+set a unique `COOKIE_NAMESPACE` in each additional deployment's private
+environment file. The original instance can remain unset. Browser cookies do not
+use the port for isolation. Use 1–32 letters, numbers, underscores or hyphens and
+keep the value stable after users sign in.
+
 The template leaves all required values blank. Follow the section for your
 operating system after installing Docker and Compose. The examples use local
 HTTP; for HTTPS, replace `compose.http.yaml` with `compose.https.yaml` in every
@@ -100,11 +106,9 @@ then verify Compose is available:
 docker compose version
 ```
 
-Clone the repository and create a private deployment file outside the checkout:
+Open a terminal in the extracted release bundle and create a private deployment file outside it:
 
 ```sh
-git clone https://github.com/lunarpaper/lunarpaper.git
-cd lunarpaper/compose
 mkdir -p "$HOME/.config/lunarpaper"
 chmod 700 "$HOME/.config/lunarpaper"
 # Run this copy only for a NEW installation; never overwrite an existing file.
@@ -138,11 +142,9 @@ Compose is available:
 docker compose version
 ```
 
-Clone the repository and create a private deployment file outside the checkout:
+Open a terminal in the extracted release bundle and create a private deployment file outside it:
 
 ```powershell
-git clone https://github.com/lunarpaper/lunarpaper.git
-Set-Location lunarpaper\compose
 $deploymentDirectory = Join-Path $env:USERPROFILE '.config\lunarpaper'
 $deploymentEnv = Join-Path $deploymentDirectory 'deployment.env'
 New-Item -ItemType Directory -Force -Path $deploymentDirectory | Out-Null
@@ -179,11 +181,9 @@ and start Docker Desktop, then open Terminal and verify Compose is available:
 docker compose version
 ```
 
-Clone the repository and create a private deployment file outside the checkout:
+Open a terminal in the extracted release bundle and create a private deployment file outside it:
 
 ```sh
-git clone https://github.com/lunarpaper/lunarpaper.git
-cd lunarpaper/compose
 mkdir -p "$HOME/.config/lunarpaper"
 chmod 700 "$HOME/.config/lunarpaper"
 # Run this copy only for a NEW installation; never overwrite an existing file.
@@ -219,17 +219,29 @@ Open your exact `APP_URL` and follow guided setup, using your `SETUP_KEY` when
 requested. The initial administrator is created only for an empty user database;
 changing the bootstrap password later does not reset an existing account.
 
-The `database-bootstrap` container exits successfully after copying the matching
-fresh-install database files from the application image. Its stopped state is
-normal. The copy commands live in `/app/docker/database-bootstrap.sh` inside the
-image; customers do not edit them. This bundle requires an image containing that
-script. Container health checks measure liveness; release/setup readiness is
-reported separately at `/api/health/ready`.
+PostgreSQL includes the matching fresh-install database files in its release
+image and initializes empty volumes automatically. Service dashboards show only
+the long-running stack. Its health check verifies both runtime database
+connections. Application liveness is separate from release/setup readiness,
+reported at `/api/health/ready`.
 
-Set `LUNAR_PAPER_IMAGE` once in the private environment file. Both services use
-that selection. The application also receives it through `environment` for its
-release-reference checks: Docker's `image` field is not an application environment
-variable. Leave that forwarding entry as supplied; it is not a second input.
+For a reviewed transition from an older bundle, preserve the PostgreSQL service,
+data-volume name, credentials and keyrings. After removing the old
+`database-bootstrap` service definition, remove only its known stopped container
+through the deployment manager. Keep its old init volume until the transition
+is confirmed. Never prune unrelated resources or recreate the data volume.
+
+Image references and their internal release-check settings are supplied by the
+bundle. Keep them together when installing a release. Do not add image overrides
+to the private environment file. `release.json` records the selected release and
+both immutable image references for support.
+
+If first-time initialization is interrupted, the database preserves the volume
+and reports `LUNAR_PAPER_DATABASE_INIT_INTERRUPTED`. It does not replay a fresh
+baseline over partial data. Preserve the logs and volume for operator recovery
+or restore a verified backup. Do not remove the initialization marker to bypass
+this check. Existing populated volumes continue through the application's
+protected upgrade flow.
 
 Only the selected access service publishes host ports. PostgreSQL, Redis and file
 storage are private to Docker. The application can make outbound requests for
@@ -259,8 +271,8 @@ in does not apply migrations. Ready installations start normally without repeati
 setup; pending upgrades remain in maintenance until completed by the operator.
 
 Startup requires a valid independent SETUP_KEY and never applies pending migrations
-automatically. Fresh empty database volumes still receive the baseline from the
-selected image through database-bootstrap.
+automatically. Fresh empty database volumes receive the prepared baseline from the bundled
+PostgreSQL image.
 
 ## Persistence and upgrades
 

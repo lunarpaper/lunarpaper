@@ -88,13 +88,15 @@ your operating system:
 - [Windows](compose/README.md#windows)
 - [macOS](compose/README.md#macos)
 
-Each path covers cloning the repository, creating a private environment outside
-the checkout, validating the configuration, pulling the selected release and
+Each path covers downloading the release bundle, creating a private environment outside
+the bundle, validating the configuration, pulling the selected release and
 starting Lunar Paper. The [complete Compose guide](compose/README.md) also covers
 LAN access, HTTPS, certificates, backups and upgrades.
 
-> Pin a release version or image digest that the release notes identify as
-> compatible with this bundle. Do not deploy the moving `latest` tag.
+> Download the Compose ZIP attached to the selected release. It already contains
+> matching application and PostgreSQL image digests. No separate database image
+> selection or initialization command is required. Repository files are templates
+> used to generate that download.
 
 ## What is in this repository
 
@@ -113,7 +115,7 @@ support.
 
 ## Operate it safely
 
-- Keep the populated environment file and all credentials outside the clone.
+- Keep the populated environment file and all credentials outside the release bundle.
 - Keep `SETUP_KEY`, encryption keys and database passwords stable across restarts.
 - Back up PostgreSQL, Redis, uploads, the complete SeaweedFS volume, Caddy state
   and the private environment file.
