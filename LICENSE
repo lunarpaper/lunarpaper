@@ -26,6 +26,8 @@ moving the licensed installation to new infrastructure.
 
 You may not:
 
+- copy, modify or create derivative works of the Software, including its source
+  or object (compiled) code, except as expressly permitted by these terms;
 - redistribute, sell, sublicense or make the Software available as a hosted
   service for somebody else;
 - run more active installations or accounts than your licence permits;
@@ -34,12 +36,24 @@ You may not:
 - reverse engineer the Software except where applicable law gives you a right
   that cannot be excluded.
 
+These restrictions do not prevent copies needed for the installation and backups
+permitted by section 1, use of supported configuration and customisation features,
+or editing supplied deployment configuration for your permitted installation.
+They do not restrict rights that applicable law does not allow us to exclude or
+rights granted under a third-party component's own licence. Other copying,
+modification or redistribution requires Ben Martinson's prior written permission.
+
 3. OWNERSHIP AND YOUR DATA
 
-The Software, its design and documentation, and the Lunar Paper branding remain
-the property of Ben Martinson and the relevant third-party licensors. This
-licence gives you permission to use the Software; it does not transfer ownership
-of it or grant rights to the Lunar Paper name or branding.
+Ben Martinson owns Lunar Paper's source code, object (compiled) code, design,
+documentation and branding, except for third-party components and materials,
+which remain the property of their respective owners and are subject to their
+own licences. All rights in Lunar Paper not expressly granted are reserved.
+
+This licence grants permission to use the Software; it does not transfer
+ownership or grant rights to the Lunar Paper name or branding. Access to source
+code, a public repository or a container image does not make Lunar Paper open
+source or grant additional rights to copy, modify, redistribute or sublicense it.
 
 You retain ownership of the data and content you put into the Software. You are
 responsible for that content, for the people you allow to use the installation,
