@@ -126,6 +126,23 @@ support.
 
 ## Help, releases and security
 
+Maintainers can publish a release from **Actions → Publish release → Run workflow**
+on `main`. Enter **Version** without a `v` prefix (for example, `0.8.0`) and
+**Details** for the public release notes; Markdown is supported. Both Platform and
+Publisher images for that version must already be promoted and publicly readable.
+The workflow uses GitHub's built-in token; no additional repository secret is needed.
+
+The action creates `v<version>` at the selected `main` commit and attaches a Compose
+ZIP, including a blank environment template with the selected version, image digests,
+the licence, and a ZIP checksum. Templates come from this public commit, not from
+the private promotion artifact. Review template changes before merging to `main`.
+The action does not build images, start services or run database migrations.
+
+An existing release or tag stops the action instead of being overwritten. Assets
+are uploaded to a draft before publication. If publication fails after draft creation,
+inspect the draft and its assets in **Releases**, then publish the completed draft
+there rather than rerunning the workflow.
+
 - [Documentation](https://docs.lunarpaper.com/docs/) — product and administration guides.
 - [Self-hosting guide](https://docs.lunarpaper.com/self-hosting/docker/) — Docker deployment instructions.
 - [GitHub Releases](https://github.com/lunarpaper/lunarpaper/releases) — compatible images, changes and upgrade notes.
