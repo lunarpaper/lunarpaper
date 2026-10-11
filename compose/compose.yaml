@@ -1,6 +1,10 @@
+# Lunar Paper with official PostgreSQL. Select the platform version in your private environment.
+# Initialize or upgrade application schemas explicitly through protected web setup.
+name: lunarpaper
+
 services:
   lunarpaper:
-    image: ${LUNAR_PAPER_IMAGE:?Set LUNAR_PAPER_IMAGE in your private environment file}
+    image: ${LUNAR_PAPER_IMAGE:-ghcr.io/lunarpaper/platform}:${LUNAR_PAPER_VERSION:?LUNAR_PAPER_VERSION is required}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -17,18 +21,21 @@ services:
       # Keyed web setup and manual upgrades are fixed application behaviour.
       SETUP_KEY: ${SETUP_KEY:?SETUP_KEY is required}
       # Forward the same image selection to the app's release checks.
-      LUNAR_PAPER_IMAGE: ${LUNAR_PAPER_IMAGE:?LUNAR_PAPER_IMAGE is required}
+      LUNAR_PAPER_IMAGE: ${LUNAR_PAPER_IMAGE:-ghcr.io/lunarpaper/platform}:${LUNAR_PAPER_VERSION:?LUNAR_PAPER_VERSION is required}
       SYSTEM_ADMIN_USERNAME: ${SYSTEM_ADMIN_USERNAME:?SYSTEM_ADMIN_USERNAME is required}
       SYSTEM_ADMIN_PASSWORD: ${SYSTEM_ADMIN_PASSWORD:?SYSTEM_ADMIN_PASSWORD is required}
 
       SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+      COOKIE_NAMESPACE: ${COOKIE_NAMESPACE:-}
       ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
+      WORKFLOW_CREDENTIAL_ENCRYPTION_KEY: ${WORKFLOW_CREDENTIAL_ENCRYPTION_KEY:?WORKFLOW_CREDENTIAL_ENCRYPTION_KEY is required}
       INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:?INTERNAL_API_TOKEN is required}
       AI_ENCRYPTION_KEY: ${AI_ENCRYPTION_KEY:?AI_ENCRYPTION_KEY is required}
       MFA_ENCRYPTION_KEY: ${MFA_ENCRYPTION_KEY:?MFA_ENCRYPTION_KEY is required}
       SSO_ENCRYPTION_KEY: ${SSO_ENCRYPTION_KEY:?SSO_ENCRYPTION_KEY is required}
       DATA_SOURCE_ENCRYPTION_KEY: ${DATA_SOURCE_ENCRYPTION_KEY:?DATA_SOURCE_ENCRYPTION_KEY is required}
       PUBLISHER_CREDENTIAL_ENCRYPTION_KEY: ${PUBLISHER_CREDENTIAL_ENCRYPTION_KEY:?PUBLISHER_CREDENTIAL_ENCRYPTION_KEY is required}
+      PUBLISHER_PRIVATE_TARGETS: ${PUBLISHER_PRIVATE_TARGETS:-}
       EMAIL_ENCRYPTION_KEY: ${EMAIL_ENCRYPTION_KEY:?EMAIL_ENCRYPTION_KEY is required}
       ADDRESS_PROVIDER_ENCRYPTION_KEY: ${ADDRESS_PROVIDER_ENCRYPTION_KEY:?ADDRESS_PROVIDER_ENCRYPTION_KEY is required}
       EMAIL_TRACKING_SECRET: ${EMAIL_TRACKING_SECRET:?EMAIL_TRACKING_SECRET is required}
@@ -47,12 +54,16 @@ services:
       PGHOST: postgres
       PGPORT: "5432"
       PGDATABASE: platform
-      PGUSER: postgres
+      PGUSER: ${PGUSER:-postgres}
       PGPASSWORD: ${PGPASSWORD:?PGPASSWORD is required}
-      DATABASE_URL: postgresql://app_platform:${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}@postgres:5432/platform
-      INTAKE_DATABASE_URL: postgresql://app_intake:${APP_INTAKE_PASSWORD:?APP_INTAKE_PASSWORD is required}@postgres:5432/intake
-      MIGRATION_PLATFORM_DATABASE_URL: postgresql://postgres:${PGPASSWORD:?PGPASSWORD is required}@postgres:5432/platform
-      MIGRATION_INTAKE_DATABASE_URL: postgresql://postgres:${PGPASSWORD:?PGPASSWORD is required}@postgres:5432/intake
+      APP_PLATFORM_USER: ${APP_PLATFORM_USER:-app_platform}
+      APP_INTAKE_USER: ${APP_INTAKE_USER:-app_intake}
+      DATABASE_URL: postgresql://${APP_PLATFORM_USER:-app_platform}:${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}@postgres:5432/platform
+      INTAKE_DATABASE_URL: postgresql://${APP_INTAKE_USER:-app_intake}:${APP_INTAKE_PASSWORD:?APP_INTAKE_PASSWORD is required}@postgres:5432/intake
+      APP_PLATFORM_PASSWORD: ${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}
+      APP_INTAKE_PASSWORD: ${APP_INTAKE_PASSWORD:?APP_INTAKE_PASSWORD is required}
+      MIGRATION_PLATFORM_DATABASE_URL: postgresql://${PGUSER:-postgres}:${PGPASSWORD:?PGPASSWORD is required}@postgres:5432/platform
+      MIGRATION_INTAKE_DATABASE_URL: postgresql://${PGUSER:-postgres}:${PGPASSWORD:?PGPASSWORD is required}@postgres:5432/intake
       APP_DB_ROLE: "true"
       DB_POOL_MAX: "40"
 
@@ -66,7 +77,7 @@ services:
       SEAWEEDFS_FILER_URL: http://seaweedfs:8888
       SEAWEEDFS_VOLUME_URL: http://seaweedfs:8080
     volumes:
-      - uploads-data:/app/uploads
+      - "${UPLOADS_DATA:-uploads-data}:/app/uploads"
     depends_on:
       postgres:
         condition: service_healthy
@@ -88,35 +99,18 @@ services:
       - edge
       - backend
 
-  # Copies fresh-install SQL from the selected application image, not a checkout.
-  # Existing populated PostgreSQL volumes do not rerun these init files.
-  database-bootstrap:
-    image: ${LUNAR_PAPER_IMAGE:?LUNAR_PAPER_IMAGE is required}
-    user: "0:0"
-    restart: "no"
-    network_mode: none
-    entrypoint: ["/bin/sh", "/app/docker/database-bootstrap.sh"]
-    volumes:
-      - database-init:/database-init
-
   postgres:
-    image: postgres:17-alpine
+    image: ${POSTGRES_IMAGE:-postgres:17-alpine}
     restart: unless-stopped
     environment:
       POSTGRES_DB: platform
-      POSTGRES_USER: postgres
+      POSTGRES_USER: ${PGUSER:-postgres}
       POSTGRES_PASSWORD: ${PGPASSWORD:?PGPASSWORD is required}
-      APP_PLATFORM_PASSWORD: ${APP_PLATFORM_PASSWORD:?APP_PLATFORM_PASSWORD is required}
-      APP_INTAKE_PASSWORD: ${APP_INTAKE_PASSWORD:?APP_INTAKE_PASSWORD is required}
     command: ["postgres", "-c", "max_connections=200"]
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - database-init:/docker-entrypoint-initdb.d:ro
-    depends_on:
-      database-bootstrap:
-        condition: service_completed_successfully
+      - "${POSTGRES_DATA:-postgres-data}:/var/lib/postgresql/data"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d platform && pg_isready -U postgres -d intake"]
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
       interval: 10s
       timeout: 5s
       retries: 12
@@ -131,7 +125,7 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
     command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD is required}"]
     volumes:
-      - redis-data:/data
+      - "${REDIS_DATA:-redis-data}:/data"
     healthcheck:
       test: ["CMD-SHELL", "REDISCLI_AUTH=\"$${REDIS_PASSWORD}\" redis-cli ping | grep -q PONG"]
       interval: 10s
@@ -155,8 +149,10 @@ services:
       - -volume.max=0
       - -filer
     volumes:
-      - seaweedfs-data:/data
-      - ./filer.toml:/etc/seaweedfs/filer.toml:ro
+      - "${SEAWEEDFS_DATA:-seaweedfs-data}:/data"
+    configs:
+      - source: filer
+        target: /etc/seaweedfs/filer.toml
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9333/cluster/status && wget -q -O /dev/null http://127.0.0.1:8888/"]
       interval: 10s
@@ -171,10 +167,17 @@ volumes:
   postgres-data:
   redis-data:
   uploads-data:
-  database-init:
   seaweedfs-data:
 
 networks:
   edge:
   backend:
     internal: true
+
+configs:
+  filer:
+    content: |
+      # Persist the file directory/index alongside the file contents in the data volume.
+      [leveldb2]
+      enabled = true
+      dir = "/data/filerldb2"

@@ -77,7 +77,7 @@ project on the [Lunar Paper website](https://lunarpaper.com/about/).
 ## Get started with Docker
 
 This repository contains the customer-facing information and the supported
-single-host Docker Compose deployment bundle. Application images are published
+single-host Docker Compose deployment bundle. The first public application image will be `0.8.0`, published
 to GitHub Container Registry as `ghcr.io/lunarpaper/platform`; large image files
 are not committed to Git.
 
@@ -88,13 +88,15 @@ your operating system:
 - [Windows](compose/README.md#windows)
 - [macOS](compose/README.md#macos)
 
-Each path covers cloning the repository, creating a private environment outside
-the checkout, validating the configuration, pulling the selected release and
+Each path covers creating configuration from the docs, creating a private environment outside
+the repository, validating the configuration, pulling the selected release and
 starting Lunar Paper. The [complete Compose guide](compose/README.md) also covers
 LAN access, HTTPS, certificates, backups and upgrades.
 
-> Pin a release version or image digest that the release notes identify as
-> compatible with this bundle. Do not deploy the moving `latest` tag.
+The docs are the configuration reference; no release download is required. Select
+one `LUNAR_PAPER_VERSION`. Official PostgreSQL 17 Alpine has an independent version.
+Unlock the web setup GUI with `SETUP_KEY` and explicitly initialize or upgrade the
+databases before launching the application.
 
 ## What is in this repository
 
@@ -113,7 +115,7 @@ support.
 
 ## Operate it safely
 
-- Keep the populated environment file and all credentials outside the clone.
+- Keep the populated environment file and all credentials outside the release bundle.
 - Keep `SETUP_KEY`, encryption keys and database passwords stable across restarts.
 - Back up PostgreSQL, Redis, uploads, the complete SeaweedFS volume, Caddy state
   and the private environment file.
