@@ -8,36 +8,42 @@ a public domain is not required.
 For the broader installation, networking, configuration, backup and maintenance
 documentation, see the public [Self-hosting guide](https://docs.lunarpaper.com/self-hosting/).
 
-> Download `lunarpaper-<version>-compose.zip` from the selected
-> [release](https://github.com/lunarpaper/lunarpaper/releases) and extract it.
-> The release bundle already pins matching application and database images.
-> The files in this repository are release templates; do not deploy them directly.
+The [Docker Compose guide](https://docs.lunarpaper.com/self-hosting/install/docker-compose/)
+provides pasteable commands to create the environment and Compose files. These
+repository files resolve to the same HTTP configuration when `compose.yaml` and
+`compose.http.yaml` are used together. The guide combines them into one file;
+this bundle keeps HTTP and HTTPS access separate. A release ZIP is optional.
+The first public image will be `0.8.0`; use it only once published.
 
 ## Installation overview
 
-1. Download and extract the release bundle, then create a private environment file outside it.
+1. Create the configuration files from the docs, then create a private environment file outside the checkout.
 2. Choose exactly one access file: HTTP or HTTPS.
 3. Validate the resolved configuration without printing secrets.
-4. Pull the pinned images and start the stack.
-5. Open `APP_URL`, unlock setup with `SETUP_KEY` and complete guided setup.
+4. Pull the selected images and start the stack.
+5. Open `APP_URL`, unlock setup with `SETUP_KEY`, explicitly initialize the databases and complete guided setup.
 
 ## Requirements
 
-- A supported Docker Engine or Docker Desktop with Docker Compose v2.
-  Deployment uses ordinary images and named volumes; no image-mount storage
-  configuration is required. See the selected release's supported host versions.
+- A supported Docker Engine or Docker Desktop with Docker Compose 2.23.1 or later.
+  SeaweedFS storage configuration is included inline in `compose.yaml`.
 - A browser address reachable from your devices: localhost, a LAN address or an
   internal hostname. For HTTPS, reserve ports 80/443 and arrange client trust for
   the internal certificate authority, or use your organisation's TLS infrastructure.
-- The generated Compose ZIP from a supported Lunar Paper release.
+- The configuration files shown in the docs or in this repository.
 - Persistent disk space for the databases, file storage and generated documents.
 
 ## Configure
 
-Keep the populated environment file **outside the extracted bundle**. Never put real
+Keep the populated environment file **outside the repository**. Never put real
 passwords, API keys or private keys into the example or any other bundle file.
 The operating-system instructions below create a private `deployment.env` from
 the blank `.env.example` template.
+
+The template lists the same required settings and optional HTTP, storage and
+database-user defaults as the guide. Required private inputs stay blank instead
+of including the guide's illustrative administrator details and abbreviated keys.
+The optional defaults are commented out; Compose supplies them when omitted.
 
 Set `APP_URL`, administrator email and password. Generate
 every remaining secret independently; do not reuse one generated value across
@@ -91,7 +97,14 @@ environment file. The original instance can remain unset. Browser cookies do not
 use the port for isolation. Use 1–32 letters, numbers, underscores or hyphens and
 keep the value stable after users sign in.
 
-The template leaves all required values blank. Follow the section for your
+The default Compose project name is `lunarpaper`, matching the guide. For an
+additional fresh instance, choose an unused `COMPOSE_PROJECT_NAME`, a different
+host port and a unique cookie namespace as described in the guide's
+[multiple-instance instructions](https://docs.lunarpaper.com/self-hosting/install/docker-compose/#running-multiple-instances).
+Replace `--project-name lunarpaper` in every command below with that instance's
+name: the command-line option takes precedence over `COMPOSE_PROJECT_NAME`.
+
+The template selects `LUNAR_PAPER_VERSION=0.8.0`; credential fields stay blank. Follow the section for your
 operating system after installing Docker and Compose. The examples use local
 HTTP; for HTTPS, replace `compose.http.yaml` with `compose.https.yaml` in every
 validation, pull and startup command.
@@ -106,7 +119,7 @@ then verify Compose is available:
 docker compose version
 ```
 
-Open a terminal in the extracted release bundle and create a private deployment file outside it:
+Open a terminal in the directory containing your Compose configuration files and create a private deployment file outside it:
 
 ```sh
 mkdir -p "$HOME/.config/lunarpaper"
@@ -142,7 +155,7 @@ Compose is available:
 docker compose version
 ```
 
-Open a terminal in the extracted release bundle and create a private deployment file outside it:
+Open a terminal in the directory containing your Compose configuration files and create a private deployment file outside it:
 
 ```powershell
 $deploymentDirectory = Join-Path $env:USERPROFILE '.config\lunarpaper'
@@ -181,7 +194,7 @@ and start Docker Desktop, then open Terminal and verify Compose is available:
 docker compose version
 ```
 
-Open a terminal in the extracted release bundle and create a private deployment file outside it:
+Open a terminal in the directory containing your Compose configuration files and create a private deployment file outside it:
 
 ```sh
 mkdir -p "$HOME/.config/lunarpaper"
@@ -219,29 +232,31 @@ Open your exact `APP_URL` and follow guided setup, using your `SETUP_KEY` when
 requested. The initial administrator is created only for an empty user database;
 changing the bootstrap password later does not reset an existing account.
 
-PostgreSQL includes the matching fresh-install database files in its release
-image and initializes empty volumes automatically. Service dashboards show only
-the long-running stack. Its health check verifies both runtime database
-connections. Application liveness is separate from release/setup readiness,
-reported at `/api/health/ready`.
+Official PostgreSQL 17 Alpine creates the initial empty `platform` database.
+Lunar Paper carries the verified Platform and Intake init files and migrations.
+After unlocking setup, review the detected state and explicitly start initialization.
+Startup and login do not import application schemas or apply pending migrations.
+Application liveness is separate from release/setup readiness at `/api/health/ready`.
 
-For a reviewed transition from an older bundle, preserve the PostgreSQL service,
-data-volume name, credentials and keyrings. After removing the old
-`database-bootstrap` service definition, remove only its known stopped container
-through the deployment manager. Keep its old init volume until the transition
-is confirmed. Never prune unrelated resources or recreate the data volume.
+Set `LUNAR_PAPER_VERSION` to the selected published platform version. PostgreSQL
+uses `postgres:17-alpine` independently; `POSTGRES_IMAGE` can select a qualified
+PostgreSQL 17 Alpine patch or digest. Do not change PostgreSQL major versions by
+simply changing this setting. A private registry may set `LUNAR_PAPER_IMAGE` to its
+repository without a tag. Compose appends `LUNAR_PAPER_VERSION` and forwards
+that combined reference for validation.
 
-Image references and their internal release-check settings are supplied by the
-bundle. Keep them together when installing a release. Do not add image overrides
-to the private environment file. `release.json` records the selected release and
-both immutable image references for support.
+Optional `POSTGRES_DATA`, `REDIS_DATA`, `UPLOADS_DATA` and `SEAWEEDFS_DATA` settings
+select storage sources. Their defaults are `postgres-data`, `redis-data`,
+`uploads-data` and `seaweedfs-data`, preserving the existing named volumes. Set
+an absolute host folder path to use a bind mount instead. Changing a source does
+not migrate existing data. Back up and migrate data before switching storage;
+backups must include the selected host folders when bind mounts are used.
 
-If first-time initialization is interrupted, the database preserves the volume
-and reports `LUNAR_PAPER_DATABASE_INIT_INTERRUPTED`. It does not replay a fresh
-baseline over partial data. Preserve the logs and volume for operator recovery
-or restore a verified backup. Do not remove the initialization marker to bypass
-this check. Existing populated volumes continue through the application's
-protected upgrade flow.
+If initialization is interrupted, preserve both databases and Redis. Resume only
+when protected setup verifies the recorded operation and database state. Unknown
+partial schemas require recovery; never replay init SQL or remove volumes to
+bypass an error. Existing verified databases use retained migrations through the
+same protected upgrade flow.
 
 Only the selected access service publishes host ports. PostgreSQL, Redis and file
 storage are private to Docker. The application can make outbound requests for
@@ -255,8 +270,18 @@ for setup/upgrades and backups:
 
 | Database | Application connection | Owner connection |
 | --- | --- | --- |
-| platform | DATABASE_URL, using app_platform | MIGRATION_PLATFORM_DATABASE_URL |
-| intake | INTAKE_DATABASE_URL, using app_intake | MIGRATION_INTAKE_DATABASE_URL |
+| platform | DATABASE_URL, using APP_PLATFORM_USER (default app_platform) | MIGRATION_PLATFORM_DATABASE_URL |
+| intake | INTAKE_DATABASE_URL, using APP_INTAKE_USER (default app_intake) | MIGRATION_INTAKE_DATABASE_URL |
+
+Database usernames default to `PGUSER=postgres`, `APP_PLATFORM_USER=app_platform`
+and `APP_INTAKE_USER=app_intake`. Set overrides in your private `.env` before the
+first start and keyed setup. Custom names must start with a lowercase letter,
+contain only lowercase letters, digits or underscores, and fit within 63 characters.
+Use distinct names; reserve `app_*`, `pg_*`, `postgres`, `public`, `svc_datalayer`
+and `reporting` except for the supplied defaults. Custom application logins inherit
+the canonical permission roles. Passwords are independent generated values.
+Changing `.env` does not rename users or rotate passwords in existing databases;
+keep existing credentials on upgrades.
 
 The owner URLs point to those same databases. They do not create additional
 ones. Keep owner and runtime passwords separate; Compose builds the four URLs
@@ -271,8 +296,7 @@ in does not apply migrations. Ready installations start normally without repeati
 setup; pending upgrades remain in maintenance until completed by the operator.
 
 Startup requires a valid independent SETUP_KEY and never applies pending migrations
-automatically. Fresh empty database volumes receive the prepared baseline from the bundled
-PostgreSQL image.
+automatically. Fresh initialization also requires an explicit action in protected setup.
 
 ## Persistence and upgrades
 
@@ -286,8 +310,10 @@ file. Use a consistent backup/snapshot procedure and test restoration. Unless a
 release explicitly says otherwise, do not assume an in-app backup includes the
 SeaweedFS volume.
 
-For upgrades, preserve the environment and volumes and follow the selected
-release's upgrade instructions. Schema upgrades remain an explicit operator action
+For platform upgrades, preserve the environment and volumes, update
+`LUNAR_PAPER_VERSION`, pull/recreate the platform container and follow the selected
+release's upgrade instructions. PostgreSQL does not need a matching product version.
+Schema upgrades remain an explicit operator action
 through setup. Never use `docker compose down --volumes` as an upgrade step.
 
 ## Advanced configuration
@@ -305,7 +331,9 @@ instance key, and configure/register the remote service. This bundle does not
 create that service. Empty optional Compose entries forward values when supplied
 and are omitted from the container when unset.
 
-`filer.toml` keeps SeaweedFS's directory metadata in the persistent data volume.
+The inline `configs.filer` in `compose.yaml` keeps SeaweedFS's directory metadata
+in the persistent data volume. The accompanying `filer.toml` retains the same
+configuration for bundle compatibility; Compose does not require a host-file mount.
 Its combined server command follows the [SeaweedFS server implementation](https://github.com/seaweedfs/seaweedfs/blob/4.47/weed/command/server.go),
 and the filer storage configuration follows the [upstream template](https://github.com/seaweedfs/seaweedfs/blob/4.47/weed/command/scaffold/filer.toml).
 

@@ -15,7 +15,7 @@ Everything in this repository is public and customer-facing.
   source, database migrations and generated database artifacts do not belong in
   this repository.
 - Preserve the single-server Compose model, private backend networks, separate
-  database runtime/owner credentials, image-matched bootstrap and explicit web
+  database runtime/owner credentials, application-owned initialization and explicit web
   setup.
 - Validate both HTTP and HTTPS Compose variants without starting containers and
   without writing synthetic credentials to this repository.
