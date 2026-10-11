@@ -1,0 +1,68 @@
+name: Publish release
+run-name: Publish Lunar Paper ${{ inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (already promoted, for example 0.8.0)'
+        required: true
+        type: string
+      details:
+        description: 'Details (release notes; Markdown supported)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'lunarpaper/lunarpaper' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_DETAILS: ${{ inputs.details }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Set temporary output directory
+        run: echo "RELEASE_DIR=$RUNNER_TEMP/lunarpaper-release" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22'
+      - name: Verify public images and prepare release files
+        run: node .github/scripts/prepare-release.mjs
+      - name: Package Compose download
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RELEASE_DIR/bundle"
+          zip -r "$RELEASE_DIR/lunarpaper-${RELEASE_VERSION}-compose.zip" .
+          cd "$RELEASE_DIR"
+          sha256sum "lunarpaper-${RELEASE_VERSION}-compose.zip" > SHA256SUMS
+      - name: Create draft with all release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "v${RELEASE_VERSION}" \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Lunar Paper ${RELEASE_VERSION}" \
+            --notes-file "$RELEASE_DIR/notes.md" --draft \
+            "$RELEASE_DIR/lunarpaper-${RELEASE_VERSION}-compose.zip" \
+            "$RELEASE_DIR/SHA256SUMS"
+      - name: Publish completed release
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release edit "v${RELEASE_VERSION}" --repo "$GITHUB_REPOSITORY" --draft=false
+          gh release view "v${RELEASE_VERSION}" --repo "$GITHUB_REPOSITORY" --json url --jq .url >> "$GITHUB_STEP_SUMMARY"
