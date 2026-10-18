@@ -43,7 +43,7 @@ people doing the work and the administrators running the installation.
 
 ## Twenty applications, one platform
 
-Public beta version 0.8.0 includes the following applications:
+Public beta version 0.8.1 includes the following applications:
 
 | Area | Applications |
 | --- | --- |
@@ -77,9 +77,9 @@ project on the [Lunar Paper website](https://lunarpaper.com/about/).
 ## Get started with Docker
 
 This repository contains the customer-facing information and the supported
-single-host Docker Compose deployment bundle. The first public application image will be `0.8.0`, published
-to GitHub Container Registry as `ghcr.io/lunarpaper/platform`; large image files
-are not committed to Git.
+single-host Docker Compose deployment bundle. The template selects platform
+release `0.8.1`, published to GitHub Container Registry as
+`ghcr.io/lunarpaper/platform:0.8.1`; large image files are not committed to Git.
 
 Install Docker and Docker Compose, then follow the deployment instructions for
 your operating system:
