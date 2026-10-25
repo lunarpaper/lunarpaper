@@ -1,150 +1,264 @@
 # Lunar Paper
 
-Lunar Paper is a self-hosted platform that runs on your own computer, server or
-infrastructure, keeping the platform and its data under your control.
+### A self-hosted platform for planning, data and creative work.
 
-Plan projects, manage tasks and resources, automate processes, connect and
-transform data, and turn that data into dashboards and reports. Create animated
-pixel art, build slideshows, produce structured documents, design visual content,
-compose audio and manage the assets behind it.
+Plan projects, automate processes, connect data and create dashboards, documents,
+presentations, designs and audio. Lunar Paper runs on your own computer or server,
+with collaboration, user management and access controls built in.
 
-Everything comes together in one platform, with live multi-user collaboration,
-governance, user and access management, and a broad set of features for both the
-people doing the work and the administrators running the installation.
+Organisations, small teams and individual creators get the same applications and
+features, including single sign-on, audit logs and service permissions. Choose a
+plan by the number of people who need access, and manage your own data, storage,
+backups and updates.
 
-[Explore Lunar Paper](https://lunarpaper.com/) ·
-[Browse all applications](https://lunarpaper.com/applications/) ·
-[Read the documentation](https://docs.lunarpaper.com/docs/) ·
-[Follow the self-hosting guide](https://docs.lunarpaper.com/self-hosting/)
+**Self-hosted · Free for up to three people · All features included**
 
-> **Public beta:** Use the full platform for free for three people
-> with no time limit. See the [current plans](https://lunarpaper.com/pricing/) and
-> [release notes](https://github.com/lunarpaper/lunarpaper/releases) for details.
+[Get started](https://docs.lunarpaper.com/self-hosting/install/docker-compose/) ·
+[Explore the applications](https://lunarpaper.com/applications/) ·
+[Documentation](https://docs.lunarpaper.com/docs/) ·
+[Release notes](https://github.com/lunarpaper/lunarpaper/releases) ·
+[Community](https://github.com/lunarpaper/lunarpaper/discussions)
 
-### Projects
+![A Cedar House project timeline in Lunar Paper, with assigned tasks, milestones and dependencies](screenshots/project-timeline.jpg)
 
-![A project timeline in Lunar Paper showing phases, tasks and assigned team members](screenshots/02-projects.png)
+*Projects: track tasks, milestones and dependencies on a shared timeline.*
 
-### Dashboards
+> **Free for up to three people, including after public beta.** The Moon plan
+> includes every application and feature, with no time limit. Paid plans
+> increase the number of people who can sign in. You provide the hosting and pay
+> separately for any AI provider usage. [Compare plans](https://lunarpaper.com/pricing/).
 
-![A Lunar Paper dashboard combining delivery metrics, charts and tables](screenshots/03-dashboards.png)
+## Explore Lunar Paper
 
-### Forms
+Lunar Paper includes applications for project delivery, business processes,
+reporting and creative production. Here are a few examples of what you can do.
 
-![The Lunar Paper form builder with a branded form and field controls](screenshots/04-forms.png)
+### Plan and deliver
 
-### Automation
+Build project timelines, track budgets and risks, organise tasks on boards and
+plan around your team's capacity. Keep dates and availability in shared
+calendars, and turn repeatable processes into visual automations with human
+approvals and a record of each run.
 
-![A visual automation workflow in Lunar Paper](screenshots/05-automation.png)
+![A client onboarding automation with account-team, client-decision and studio-operations swimlanes](screenshots/automation-onboarding.jpg)
 
-### Design Studio
+*Automation brings people, decisions and application actions into the same workflow.*
 
-![Lunar Paper Design Studio showing a multi-page Cedar House layout](screenshots/01-design-studio.png)
+### Turn data into something useful
 
-## Twenty applications, one platform
+Collect information with Forms and store submissions in PostgreSQL. Connect
+databases, files, web APIs and internal records through Data Hub, then build
+dashboards and reports from reusable views. Explore results with interactive
+filters, schedule delivery and export to PDF, PNG, CSV or Excel.
 
-Public beta version 0.8.1 includes the following applications:
+![The Portfolio Pulse dashboard editor showing investment totals and charts by client and discipline](screenshots/dashboards-portfolio.jpg)
+
+*Build a shared view of the work, from individual records to portfolio reporting.*
+
+### Design, write and produce media
+
+Write structured documents, map processes, build presentations and design visual
+content. Use shared brand colours, typography and approved assets. Draw sprites
+and animate them, record instruments and mix audio, or prepare responsive emails.
+Documents can be exported to PDF, Word and Markdown.
+
+![An exhibition poster in Design Studio with typography, vector artwork and canvas controls](screenshots/design-studio-poster.jpg)
+
+*Design Studio: create layouts with typography, vector artwork and export controls.*
+
+<details>
+<summary>Explore the creative side: Pixel Art</summary>
+
+![Moonwell Sanctuary in the Pixel Art editor, showing a layered forest scene, animation frames and particle controls](screenshots/pixel-art-moonwell.jpg)
+
+Draw sprites and tiles, work with layers and palettes, and build frame-by-frame
+animation with assisted motion and export tools.
+
+[Explore Pixel Art](https://lunarpaper.com/applications/pixel-art/) ·
+[Explore Audio Creator](https://lunarpaper.com/applications/audio-creator/)
+
+</details>
+
+## Applications
+
+Explore nineteen work and creative applications, plus Administration:
 
 | Area | Applications |
 | --- | --- |
-| Planning and running work | [Projects](https://lunarpaper.com/applications/projects/), [Task Boards](https://lunarpaper.com/applications/task-boards/), [Resources](https://lunarpaper.com/applications/resources/), [Automation](https://lunarpaper.com/applications/automation/), [Forms](https://lunarpaper.com/applications/forms/) and [Team Calendar](https://lunarpaper.com/applications/team-calendar/) |
-| Data and reporting | [Data Hub](https://lunarpaper.com/applications/data-hub/) and [Dashboards](https://lunarpaper.com/applications/dashboards/) |
-| Documents and publishing | [Documents](https://lunarpaper.com/applications/documents/), [Charts and Flowcharts](https://lunarpaper.com/applications/charts-and-flowcharts/), [Slideshow](https://lunarpaper.com/applications/slideshow/) and [Workspaces](https://lunarpaper.com/applications/workspace/) |
-| Design and media | [Design Studio](https://lunarpaper.com/applications/design-studio/), [Brand Hub](https://lunarpaper.com/applications/brand-hub/), [Image Generation](https://lunarpaper.com/applications/image-generation/), [Pixel Art](https://lunarpaper.com/applications/pixel-art/), [Audio Creator](https://lunarpaper.com/applications/audio-creator/) and [Asset Management](https://lunarpaper.com/applications/asset-management/) |
-| Communications | [Email Builder](https://lunarpaper.com/applications/email-builder/) |
-| Administration | [Administration](https://lunarpaper.com/applications/administration/) |
+| Plan and run work | [Projects](https://lunarpaper.com/applications/projects/), [Task Boards](https://lunarpaper.com/applications/task-boards/), [Resources](https://lunarpaper.com/applications/resources/), [Automation](https://lunarpaper.com/applications/automation/), [Forms](https://lunarpaper.com/applications/forms/), [Team Calendar](https://lunarpaper.com/applications/team-calendar/) |
+| Connect data and report | [Data Hub](https://lunarpaper.com/applications/data-hub/), [Dashboards](https://lunarpaper.com/applications/dashboards/) |
+| Develop and publish ideas | [Documents](https://lunarpaper.com/applications/documents/), [Charts and Flowcharts](https://lunarpaper.com/applications/charts-and-flowcharts/), [Slideshow](https://lunarpaper.com/applications/slideshow/), [Workspaces](https://lunarpaper.com/applications/workspace/) |
+| Design and produce media | [Design Studio](https://lunarpaper.com/applications/design-studio/), [Brand Hub](https://lunarpaper.com/applications/brand-hub/), [Image Generation](https://lunarpaper.com/applications/image-generation/), [Pixel Art](https://lunarpaper.com/applications/pixel-art/), [Audio Creator](https://lunarpaper.com/applications/audio-creator/), [Asset Management](https://lunarpaper.com/applications/asset-management/) |
+| Create communications | [Email Builder](https://lunarpaper.com/applications/email-builder/) |
+| Manage the installation | [Administration](https://lunarpaper.com/applications/administration/) |
 
-Explore the complete [applications catalogue](https://lunarpaper.com/applications/)
-or read the [platform overview](https://lunarpaper.com/platform/) for more about
-collaboration, governance, access control, shared libraries, optional AI and
-integrations.
+Across supported applications, live editing, presence, comments and notifications
+help people work together. Shared libraries, version history and publishing
+controls keep content connected as it develops.
 
-## Why self-host it?
+[Explore the platform](https://lunarpaper.com/platform/).
 
-- Keep the application, PostgreSQL data, file storage and backups on
-  infrastructure you choose.
-- Give each service its own members, branding and content while managing users,
-  teams, permissions and audit activity centrally.
-- Use local accounts or connect OIDC single sign-on.
-- Connect an OpenAI-compatible provider with your own credentials, or leave AI
-  unconfigured.
-- Choose which external services the installation may reach by configuring its
-  integrations and network policy.
+## Administration and AI
 
-Lunar Paper is an independent project built in Australia. Read more about the
-project on the [Lunar Paper website](https://lunarpaper.com/about/).
+People can sign in with local accounts or OIDC single sign-on, with multi-factor
+authentication available. Administrators manage users, teams and roles. Each
+service has its own members and permissions for viewing, editing and publishing.
+Audit logs record user, automation and AI activity and can be filtered or exported
+as CSV.
+
+AI is optional. If you configure an OpenAI-compatible provider, requests go
+directly from your installation to that provider using your credentials.
+Administrators can set usage limits and review usage and costs. External
+integrations and licence activation also need access to their respective services.
 
 ## Get started with Docker
 
-This repository contains the customer-facing information and the supported
-single-host Docker Compose deployment bundle. The template selects platform
-release `0.8.1`, published to GitHub Container Registry as
-`ghcr.io/lunarpaper/platform:0.8.1`; large image files are not committed to Git.
+Install Lunar Paper on a single computer or server with **Docker Compose 2.23.1
+or later**. The stack includes the application, PostgreSQL, Redis and SeaweedFS
+file storage, with Caddy for optional HTTPS. The documentation provides the
+configuration and commands for Windows, Linux and macOS; no release ZIP is required.
+You can run it on an internal network without a public domain.
 
-Install Docker and Docker Compose, then follow the deployment instructions for
-your operating system:
+Create your private environment file outside this repository, choose HTTP or
+HTTPS, and follow the guide to pull a published release and start the stack.
+Then open your configured browser address, unlock setup with `SETUP_KEY` and
+complete first-time initialisation.
 
-- [Linux](compose/README.md#linux)
-- [Windows](compose/README.md#windows)
-- [macOS](compose/README.md#macos)
-
-Each path covers creating configuration from the docs, creating a private environment outside
-the repository, validating the configuration, pulling the selected release and
-starting Lunar Paper. The [complete Compose guide](compose/README.md) also covers
-LAN access, HTTPS, certificates, backups and upgrades.
-
-The docs are the configuration reference; no release download is required. Select
-one `LUNAR_PAPER_VERSION`. Official PostgreSQL 17 Alpine has an independent version.
-Unlock the web setup GUI with `SETUP_KEY` and explicitly initialize or upgrade the
-databases before launching the application.
-
-## What is in this repository
-
-| Path | Purpose |
+| Guide | What it covers |
 | --- | --- |
-| [`compose/`](compose/) | Single-host Docker Compose deployment for HTTP or HTTPS |
-| [`compose/.env.example`](compose/.env.example) | Blank configuration template—never put real credentials in this repository |
-| [`screenshots/`](screenshots/) | Full-resolution promotional product screenshots used by this README |
-| [`LICENSE`](LICENSE) | Lunar Paper software licence |
-| [`SECURITY.md`](SECURITY.md) | Private vulnerability-reporting guidance |
+| [Install Docker](https://docs.lunarpaper.com/self-hosting/install-docker/) | Docker prerequisites and platform support |
+| [Install with Docker Compose](https://docs.lunarpaper.com/self-hosting/install/docker-compose/) | Configuration, startup and first-time setup on Windows, Linux and macOS |
+| [Docker Compose with HTTPS](https://docs.lunarpaper.com/self-hosting/install/https/) | Encrypted access with Caddy and internal or public certificates |
+| [Configuration and secrets](https://docs.lunarpaper.com/self-hosting/configuration/) | Protecting settings, credentials and encryption keys |
 
-The Compose bundle runs Lunar Paper with PostgreSQL, Redis and SeaweedFS, plus
-optional Caddy HTTPS termination. It is intended for a fresh, single-host
-installation; it does not claim multi-node high availability or Kubernetes
-support.
+## Upgrading
 
-## Operate it safely
+Upgrading involves updating the Docker image, then opening web setup with your
+`SETUP_KEY` to finish the update. Setup handles any database changes and activates
+the release, including updates that have no database changes.
 
-- Keep the populated environment file and all credentials outside the release bundle.
-- Keep `SETUP_KEY`, encryption keys and database passwords stable across restarts.
-- Back up PostgreSQL, Redis, uploads, the complete SeaweedFS volume, Caddy state
-  and the private environment file.
-- Keep `--project-name lunarpaper` and the same access-file selection on every
-  Compose command so the deployment continues using the same volumes.
-- Never use `docker compose down --volumes` during an upgrade.
-- Review release notes and make tested backups before changing image versions.
+The [upgrade guide](https://docs.lunarpaper.com/self-hosting/upgrades/) covers the
+steps and what to back up first. Check the
+[release notes](https://github.com/lunarpaper/lunarpaper/releases) for anything
+specific to the version you're installing.
 
-## Help, releases and security
+- [Docker Compose upgrade steps](https://docs.lunarpaper.com/self-hosting/install/docker-compose/#upgrade)
+- [HTTPS deployment upgrade steps](https://docs.lunarpaper.com/self-hosting/install/https/#upgrade)
+- [Backup and restore](https://docs.lunarpaper.com/self-hosting/backup-restore/)
+- [Rollback guidance](https://docs.lunarpaper.com/self-hosting/upgrades/#rollback)
 
-Releases are published by the maintainer's private release process. Public releases
-include release notes, a reviewed Compose ZIP and its SHA-256 checksum. Platform and
-Publisher images are available through this repository's **Packages** section.
-GitHub Actions is disabled in this public repository; no workflow run is needed
-to download a release or pull an image.
+Never use `docker compose down --volumes` during an upgrade. If the database has
+changed, rollback requires the documented restore procedure rather than simply
+switching to an older image.
 
-- [Documentation](https://docs.lunarpaper.com/docs/) — product and administration guides.
-- [Self-hosting guide](https://docs.lunarpaper.com/self-hosting/docker/) — Docker deployment instructions.
-- [GitHub Releases](https://github.com/lunarpaper/lunarpaper/releases) — compatible images, changes and upgrade notes.
-- [Community forum](https://github.com/lunarpaper/lunarpaper/discussions) — usage questions and ideas.
-- [GitHub Issues](https://github.com/lunarpaper/lunarpaper/issues) — reproducible, non-security bugs.
-- [SECURITY.md](SECURITY.md) — private vulnerability-reporting instructions.
+## Help and feedback
 
-Do not post credentials, customer data or vulnerability details in a public
-issue.
+- [Documentation](https://docs.lunarpaper.com/docs/) — application and administration guides.
+- [Community discussions](https://github.com/lunarpaper/lunarpaper/discussions) — questions, ideas and examples of what you are building.
+- [Report a bug](https://github.com/lunarpaper/lunarpaper/issues) — include the affected version and steps to reproduce it.
+- [Report a security issue privately](https://github.com/lunarpaper/lunarpaper/blob/main/SECURITY.md) — follow the security policy rather than opening a public issue.
 
-## Licence
+Keep credentials and customer data out of public reports.
 
-Lunar Paper is proprietary software. Installing or using it means accepting the
-terms in [LICENSE](LICENSE). The public availability of this repository and its
-container images does not grant redistribution or modification rights. See the
-[licence overview](https://lunarpaper.com/licence/) for a plain-language summary.
+## Licence and project
+
+Lunar Paper is proprietary software, with a free plan for up to three active
+accounts. Use is governed by the
+[software licence](https://github.com/lunarpaper/lunarpaper/blob/main/LICENSE).
+The public repository and container images do not grant modification or
+redistribution rights.
+
+Created in Australia by Ben Martinson, drawing on 15 years of experience with
+low-code platforms, design tools, automation and data.
+[About Lunar Paper](https://lunarpaper.com/about/) ·
+[Licence overview](https://lunarpaper.com/licence/)
+
+## More of Lunar Paper
+
+### Task Boards
+
+Track delivery through configurable columns, with owners, priorities and due dates.
+
+![The Cedar House task board with Backlog, To Do, In Progress, Review and Done columns](screenshots/task-boards-kanban.jpg)
+
+### Resources
+
+See team skills, utilisation and weekly capacity before assigning work.
+
+![The resource pool filtered to designers, with skills, utilisation and weekly capacity on each person's card](screenshots/resources-team.jpg)
+
+Record each person's skills, weekly hours and availability in their resource profile.
+
+![The Resources editor showing a designer's skills, weekly capacity, hourly rate and availability dates](screenshots/resources-skills-capacity.jpg)
+
+### Forms
+
+Build forms for reviews, requests and sign-off with a visual editor.
+
+![A creative review form in the Forms editor, showing field types, page tabs and project and deliverable fields](screenshots/forms-review.jpg)
+
+### Data Hub
+
+Preview reusable data views with column information, filters and freshness controls.
+
+![A hospitality launch-planning view in Data Hub, showing column types, cache controls and client records](screenshots/data-hub-planning.jpg)
+
+### Documents
+
+Create structured reports using reusable content blocks.
+
+![A weekly delivery report in the Documents editor with a component library, written update and project summary table](screenshots/documents-report.jpg)
+
+### Slideshow
+
+Build presentations with reusable layouts, media, transitions and speaker notes.
+
+![A Cedar House guest-experience presentation in Slideshow, with slide thumbnails, a photographic title slide and transition settings](screenshots/slideshow-guest-experience.jpg)
+
+### Brand Hub
+
+Manage logo variants, typography, colours and guidelines for a consistent identity.
+
+![Cedar House logo variants in Brand Hub, including primary and light wordmarks and a monogram](screenshots/brand-hub-logos.jpg)
+
+### Audio Creator
+
+Balance instruments and recorded tracks with a multi-channel mixer.
+
+![The Audio Creator mixer with instrument channels, EQ, sends, faders and a master channel](screenshots/audio-mixer.jpg)
+
+### Asset Management
+
+Group related content into collections for campaigns and other shared work.
+
+![A Cedar House opening-campaign collection in the asset library, listing nine related assets](screenshots/asset-library-collection.jpg)
+
+### Email Builder
+
+Design and preview branded emails for updates and reports.
+
+![A branded Harbour and Field weekly update displayed in Email Builder's preview](screenshots/email-preview.jpg)
+
+### Team Calendar
+
+View scheduled work, client reviews and delivery dates in a shared calendar.
+
+![The Team Calendar month view showing studio work, client reviews and delivery deadlines](screenshots/team-calendar-month.jpg)
+
+### Charts and Flowcharts
+
+Map processes and content relationships with shapes and connectors.
+
+![A campaign content map linking a brand brief, guest email, social collection and other campaign materials](screenshots/charts-content-map.jpg)
+
+### Workspaces
+
+Keep research and draft documents together in a project knowledge base.
+
+![A guest-experience knowledge base in Workspaces, with research topics, a draft document and a research summary](screenshots/workspace-research.jpg)
+
+### Image Generation
+
+Generate images and edit them with layers, selection tools and image adjustments.
+
+![A photograph in the Image Generation editor, with drawing tools, image adjustments and an AI assistant panel](screenshots/image-generation-adjustments.jpg)
