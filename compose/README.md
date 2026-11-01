@@ -13,8 +13,8 @@ provides pasteable commands to create the environment and Compose files. These
 repository files resolve to the same HTTP configuration when `compose.yaml` and
 `compose.http.yaml` are used together. The guide combines them into one file;
 this bundle keeps HTTP and HTTPS access separate. A release ZIP is optional.
-The template selects published platform release `0.8.1`. Review the
-[release notes](https://github.com/lunarpaper/lunarpaper/releases/tag/v0.8.1)
+The template selects published platform release `0.8.2`. Review the
+[release notes](https://github.com/lunarpaper/lunarpaper/releases/tag/v0.8.2)
 before upgrading an existing installation.
 
 ## Installation overview
@@ -106,7 +106,7 @@ host port and a unique cookie namespace as described in the guide's
 Replace `--project-name lunarpaper` in every command below with that instance's
 name: the command-line option takes precedence over `COMPOSE_PROJECT_NAME`.
 
-The template selects `LUNAR_PAPER_VERSION=0.8.1`; credential fields stay blank. Follow the section for your
+The template selects `LUNAR_PAPER_VERSION=0.8.2`; credential fields stay blank. Follow the section for your
 operating system after installing Docker and Compose. The examples use local
 HTTP; for HTTPS, replace `compose.http.yaml` with `compose.https.yaml` in every
 validation, pull and startup command.
