@@ -13,7 +13,9 @@ backups and updates.
 
 **Self-hosted · Free for up to three people · All features included**
 
-[Get started](https://docs.lunarpaper.com/self-hosting/install/docker-compose/) ·
+[**Quick install**](https://docs.lunarpaper.com/self-hosting/install/try-locally/) to try Lunar Paper on your computer.
+
+[Docker Compose guide](https://docs.lunarpaper.com/self-hosting/install/docker-compose/) ·
 [Explore the applications](https://lunarpaper.com/applications/) ·
 [Documentation](https://docs.lunarpaper.com/docs/) ·
 [Release notes](https://github.com/lunarpaper/lunarpaper/releases) ·
