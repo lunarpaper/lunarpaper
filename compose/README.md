@@ -13,8 +13,8 @@ provides pasteable commands to create the environment and Compose files. These
 repository files resolve to the same HTTP configuration when `compose.yaml` and
 `compose.http.yaml` are used together. The guide combines them into one file;
 this bundle keeps HTTP and HTTPS access separate. A release ZIP is optional.
-The template selects published platform release `0.8.2`. Review the
-[release notes](https://github.com/lunarpaper/lunarpaper/releases/tag/v0.8.2)
+The template selects published platform release `0.8.3`. Review the
+[release notes](https://github.com/lunarpaper/lunarpaper/releases/tag/v0.8.3)
 before upgrading an existing installation.
 
 ## Installation overview
@@ -40,11 +40,11 @@ before upgrading an existing installation.
 Keep the populated environment file **outside the repository**. Never put real
 passwords, API keys or private keys into the example or any other bundle file.
 The operating-system instructions below create a private `deployment.env` from
-the blank `.env.example` template.
+the `.env.example` template.
 
 The template lists the same required settings and optional HTTP, storage and
-database-user defaults as the guide. Required private inputs stay blank instead
-of including the guide's illustrative administrator details and abbreviated keys.
+database-user defaults as the guide. It includes a public localhost demo login.
+Deployment secrets are blank.
 The optional defaults are commented out; Compose supplies them when omitted.
 
 Set `APP_URL`, administrator email and password. Generate
@@ -52,6 +52,35 @@ every remaining secret independently; do not reuse one generated value across
 fields. The form-file keyring is a JSON object using `v1` as its key ID, as
 explained in the template. Keep all keys and database passwords stable across
 restarts. Losing encryption keys can make stored content unreadable.
+
+### Local demo sign-in
+
+For a fresh localhost demo, sign in as **demo@lunarpaper.com** with password
+`LunarPaper-Demo!083`. For shared deployments, choose private credentials before first setup.
+To generate a unique password, run the command for your computer.
+Replace the two administrator lines in your private `deployment.env` with
+the two lines it prints. Save the file before starting Compose. After web setup,
+use the email and the full password from those lines to sign in.
+
+**Windows PowerShell**
+
+```powershell
+$bytes = New-Object byte[] 16
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+try { $rng.GetBytes($bytes) } finally { $rng.Dispose() }
+$suffix = [BitConverter]::ToString($bytes).Replace('-', '').ToLowerInvariant()
+"SYSTEM_ADMIN_USERNAME=demo@lunarpaper.com"
+"SYSTEM_ADMIN_PASSWORD=Orbit7!$suffix"
+```
+
+**Linux or macOS**
+
+```sh
+suffix=$(openssl rand -hex 16) &&
+  printf '%s\n' 'SYSTEM_ADMIN_USERNAME=demo@lunarpaper.com' 'SYSTEM_ADMIN_PASSWORD=Orbit7!'"$suffix"
+```
+
+To receive password-reset emails, use an address you control.
 
 ## Choose HTTP or HTTPS
 
@@ -106,7 +135,7 @@ host port and a unique cookie namespace as described in the guide's
 Replace `--project-name lunarpaper` in every command below with that instance's
 name: the command-line option takes precedence over `COMPOSE_PROJECT_NAME`.
 
-The template selects `LUNAR_PAPER_VERSION=0.8.2`; credential fields stay blank. Follow the section for your
+The template selects `LUNAR_PAPER_VERSION=0.8.3`. Follow the section for your
 operating system after installing Docker and Compose. The examples use local
 HTTP; for HTTPS, replace `compose.http.yaml` with `compose.https.yaml` in every
 validation, pull and startup command.
