@@ -9,8 +9,8 @@ Everything in this repository is public and customer-facing.
   available.
 - Never add credentials, API keys, tokens, passwords, private keys, populated
   environment files, backups, logs, database dumps or customer data.
-- Keep required values blank in `.env.example`; examples must use unmistakably
-  nonfunctional placeholders or reserved `.invalid` domains.
+- Keep private settings blank in `.env.example`. The documented localhost demo
+  login is the only permitted example account.
 - Keep customer configuration and operational documentation here. Application
   source, database migrations and generated database artifacts do not belong in
   this repository.
